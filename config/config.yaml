@@ -1,0 +1,83 @@
+# Fraud Detection System Configuration
+
+# Data Configuration
+data:
+  raw_path: "data/raw/"
+  processed_path: "data/processed/"
+  test_size: 0.2
+  random_state: 42
+
+# Preprocessing
+preprocessing:
+  handle_missing_values:
+    strategy: "drop"  # Options: drop, mean
+  remove_outliers:
+    enabled: true
+    threshold: 3  # Z-score threshold
+  scaling:
+    method: "robust"  # Options: standard, robust, minmax
+
+# Feature Engineering
+features:
+  temporal_features: true
+  amount_features: true
+  customer_features: true
+  merchant_features: true
+  velocity_features: true
+  location_features: true
+  interaction_features: true
+
+# XGBoost Model
+xgboost:
+  max_depth: 6
+  learning_rate: 0.1
+  n_estimators: 100
+  objective: "binary:logistic"
+  eval_metric: "logloss"
+  early_stopping_rounds: 10
+  scale_pos_weight: null  # Auto-calculate if null
+
+# Isolation Forest
+isolation_forest:
+  contamination: 0.05
+  n_estimators: 100
+  random_state: 42
+
+# Inference
+inference:
+  use_ensemble: true
+  xgb_weight: 0.6
+  iso_weight: 0.4
+  decision_threshold: 0.5
+  
+# Risk Levels
+risk_levels:
+  low: [0.0, 0.3]
+  medium: [0.3, 0.6]
+  high: [0.6, 0.8]
+  critical: [0.8, 1.0]
+
+# Dashboard
+dashboard:
+  port: 8501
+  theme: "light"  # Options: light, dark
+  refresh_interval: 60  # seconds
+
+# Logging
+logging:
+  level: "INFO"  # Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/fraud_detection.log"
+
+# Model Paths
+models:
+  xgboost_path: "models/xgboost_model.pkl"
+  isolation_forest_path: "models/isolation_forest.pkl"
+  scaler_path: "models/preprocessing_pipeline.pkl"
+
+# API
+api:
+  host: "0.0.0.0"
+  port: 5000
+  debug: false
+  enable_swagger: true
